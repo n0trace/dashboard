@@ -18,9 +18,8 @@ export default {
   connect: (settings, connectionUpdate, logUpdate, taskUpdate) => {
     logger.log("api - connect - settings", settings);
 
-    const logString = `${settings.host}:${settings.port}${
-      settings.log.startsWith("/") ? settings.log : "/" + settings.log
-    }`;
+    const logString = `${settings.host}:${settings.port}${settings.log.startsWith("/") ? settings.log : "/" + settings.log
+      }`;
     logger.log("api - connect - logString", logString);
 
     if (logStream) logStream.close();
@@ -47,11 +46,10 @@ export default {
       logStream.close();
     };
 
-    const taskString = `${settings.host}:${settings.port}${
-      settings.profile.startsWith("/")
-        ? settings.profile
-        : "/" + settings.profile
-    }`;
+    const taskString = `${settings.host}:${settings.port}${settings.profile.startsWith("/")
+      ? settings.profile
+      : "/" + settings.profile
+      }`;
     logger.log("api - connect - taskString", taskString);
 
     if (taskStream) taskStream.close();
@@ -83,20 +81,19 @@ export default {
     return result.data;
   },
   getYAML: async (settings) => {
-    const connectionString = `${settings.host}:${settings.port}${
-      settings.yaml.startsWith("/") ? settings.yaml : "/" + settings.yaml
-    }`;
+    const connectionString = `${settings.host}:${settings.port}${settings.yaml.startsWith("/") ? settings.yaml : "/" + settings.yaml
+      }`;
     logger.log("api - getYAML - connectionString", connectionString);
     const result = await axios.get(connectionString, { timeout });
     return result.data;
   },
   getImages: async () => {
-    const result = await hub.get("images");
-    return result.data;
+    const result = await hub.post("tasks.Tasks/QueryAllRunners");
+    return result.data['runners'];
   },
   getImage: async (id) => {
-    const result = await hub.get(`/images/${id}`);
-    return result.data;
+    const result = await hub.post("tasks.Tasks/QueryRunner", { 'id': id });
+    return result.data['runner'];
   },
   postRating: async (imageId, stars) => {
     const result = await hub.post(`/images/${imageId}/ratings`, { stars });

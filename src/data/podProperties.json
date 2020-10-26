@@ -6,7 +6,7 @@
       "direction": "input"
     },
     {
-      "name": "passport",
+      "name": "password",
       "type": "str",
       "direction": "input"
     },
