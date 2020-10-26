@@ -49,12 +49,12 @@ function getUserFlows() {
   const userFlows = JSON.parse(localStorage.getItem("userFlows"));
   return _.isEmpty(userFlows)
     ? {
-        _userFlow: {
-          name: "Custom Flow 1",
-          type: "user-generated",
-          flow: getInitialFlow(),
-        },
-      }
+      _userFlow: {
+        name: "Custom Flow 1",
+        type: "user-generated",
+        flow: getInitialFlow(),
+      },
+    }
     : userFlows;
 }
 

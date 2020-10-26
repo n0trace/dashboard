@@ -7,10 +7,12 @@ import { Button, FormControl, Card } from "react-bootstrap";
 
 interface Node extends INode {
   label?: string;
+  description?: string;
 }
 
 type ParsedNode = {
   label: string;
+  description: string;
   id: string;
   properties: { [key: string]: string | number };
   newProperties: { [key: string]: string | number };
@@ -24,8 +26,9 @@ const parseNode = (node: Node): ParsedNode => {
   const properties = { ...node.properties };
   const newProperties = {};
   const label = node.label || "";
+  const description = node.description || "";
 
-  return { label, id: node.id, properties, newProperties };
+  return { label, description, id: node.id, properties, newProperties };
 };
 
 function ReadOnly({ duplicateFlow }: { duplicateFlow: () => void }) {
@@ -118,6 +121,7 @@ type EditNodeProps = {
   node: ParsedNode;
   availableProperties: PropertyItem[];
   updateLabel: (label: string) => void;
+  updateDescription: (description: string) => void;
   updateNewValue: (key: string, value: string | number) => void;
   updateExistingValue: (key: string, value: string | number) => void;
   deleteSelection: () => void;
@@ -126,6 +130,7 @@ type EditNodeProps = {
 function EditNode({
   node,
   updateLabel,
+  updateDescription,
   updateNewValue,
   updateExistingValue,
   deleteSelection,
@@ -153,6 +158,7 @@ function EditNode({
   }, [node.id, availableProperties]);
 
   let label = node.label || node.properties.name;
+  let description = node.description || node.properties.description;
 
   return (
     <div className="h-100 d-flex flex-column">
@@ -165,6 +171,17 @@ function EditNode({
           value={label}
           onChange={(e) => updateLabel(e.target.value)}
           className="pod-name-input"
+        />
+      </div>
+      <div className="p-2 mb-1">
+        <p className="mb-1">
+          <b>Pod Description</b>
+        </p>
+        <FormControl
+          spellCheck={false}
+          value={description}
+          onChange={(e) => updateDescription(e.target.value)}
+          className="pod-description-input"
         />
       </div>
       <p className="mb-0 px-2">
@@ -308,6 +325,12 @@ function FlowChartSidebar({
     });
   }
 
+  function updateDescription(description: string) {
+    updateNode({
+      ...node,
+      description,
+    });
+  }
   function updateNewValue(key: string, value: any) {
     if (!node) return;
     let newNode = _.cloneDeep(node);
@@ -337,20 +360,21 @@ function FlowChartSidebar({
             deleteSelection={deleteSelection}
           />
         ) : (
-          node && (
-            <EditNode
-              availableProperties={availableProperties}
-              node={node}
-              updateLabel={updateLabel}
-              updateNewValue={updateNewValue}
-              updateExistingValue={updateExistingValue}
-              deleteSelection={deleteSelection}
-            />
+            node && (
+              <EditNode
+                availableProperties={availableProperties}
+                node={node}
+                updateLabel={updateLabel}
+                updateDescription={updateDescription}
+                updateNewValue={updateNewValue}
+                updateExistingValue={updateExistingValue}
+                deleteSelection={deleteSelection}
+              />
+            )
           )
-        )
       ) : (
-        <PodMenu />
-      )}
+          <PodMenu />
+        )}
       {readonly && <ReadOnly duplicateFlow={duplicateFlow} />}
     </Card>
   );
