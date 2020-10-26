@@ -1,12 +1,11 @@
 module.exports = {
   pokedex: {
-    name: 'Airdrop Task 1',
+    name: 'All Templates',
     type: 'example',
     yaml: `!Flow
     with:
       read_only: true
       rest_api: true
-      port_expose: $JINA_PORT
     pods:
       gateway: {}
       twitter登录:
@@ -23,6 +22,9 @@ module.exports = {
         needs: google登录
       telegram机器人:
         template: telegram-robot
+        needs:
+          - google表单
+          - twitter点赞
     `,
   }
 };

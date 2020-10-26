@@ -1,15 +1,61 @@
-[
-  {
-    "name": "template",
-    "type": "str",
-    "comment": "模板"
-  },
-  {
-    "name": "socket_in",
-    "type": "SocketType"
-  },
-  {
-    "name": "socket_out",
-    "type": "SocketType"
-  }
-]
+{
+  "twitter-login": [
+    {
+      "name": "username/email",
+      "type": "str",
+      "direction": "input"
+    },
+    {
+      "name": "passport",
+      "type": "str",
+      "direction": "input"
+    },
+    {
+      "name": "phone",
+      "type": "str",
+      "direction": "input"
+    },
+    {
+      "name": "cookies",
+      "type": "str",
+      "direction": "output"
+    }
+  ],
+  "twitter-praise": [
+    {
+      "name": "link",
+      "type": "str"
+    },
+    {
+      "name": "session",
+      "type": "str"
+    }
+  ],
+  "google-login": [
+    {
+      "name": "username/email",
+      "type": "str"
+    },
+    {
+      "name": "passport",
+      "type": "str"
+    },
+    {
+      "name": "phone",
+      "type": "str"
+    }
+  ],
+  "google-form": [
+    {
+      "name": "socket_in",
+      "type": "SocketType"
+    },
+    {
+      "name": "socket_out",
+      "type": "SocketType"
+    }
+  ],
+  "telegram-robot": [],
+  "undefined": [],
+  "": []
+}

@@ -36,7 +36,12 @@ const serializeLogsToJSONBlob = (logs) => toBlob(serializeLogsToJSON(logs));
 const serializeLogsToTextBlob = (logs) => toBlob(serializeLogsToText(logs));
 
 const propertyTypes = {};
-propertyList.forEach((prop) => (propertyTypes[prop.name] = prop.type));
+
+Object.keys(propertyList).forEach(function (key) {
+  const prop = propertyList[key]
+  propertyTypes[prop.name] = prop.type;
+});
+
 
 export function copyToClipboard(str) {
   const temp = document.createElement("textarea");
@@ -214,15 +219,15 @@ export function formatSeconds(numSeconds) {
   let hour = 60 * minute;
 
   return numSeconds < minute ? `${Math.floor(numSeconds)}s`
-    : numSeconds < hour ? `${Math.floor(numSeconds/minute)}m ${Math.floor(numSeconds % minute)}s`
-    : `${Math.floor(numSeconds/hour)}h ${Math.floor((numSeconds % hour)/minute)}m ${Math.floor(numSeconds%minute)}s`
+    : numSeconds < hour ? `${Math.floor(numSeconds / minute)}m ${Math.floor(numSeconds % minute)}s`
+      : `${Math.floor(numSeconds / hour)}h ${Math.floor((numSeconds % hour) / minute)}m ${Math.floor(numSeconds % minute)}s`
 }
 
 export function formatBytes(numBytes) {
   return numBytes < 1024 ? `${numBytes} Bytes`
     : (numBytes < 1024 ** 2) ? `${(numBytes / 1024).toFixed(1)} KB`
-    : (numBytes < 1024 ** 3) ? `${(numBytes / 1024 ** 2).toFixed(1)} MB`
-    : `${(numBytes / 1024 ** 3).toFixed(1)} GB`;
+      : (numBytes < 1024 ** 3) ? `${(numBytes / 1024 ** 2).toFixed(1)} MB`
+        : `${(numBytes / 1024 ** 3).toFixed(1)} GB`;
 }
 
 function getNodeDepth(nodes, currentId, currentDepth) {

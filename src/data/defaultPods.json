@@ -1,9 +1,7 @@
 [
   {
     "name": "twitter登录",
-    "template": "twitter-login",
-    "username": "hello",
-    "password": "world"
+    "template": "twitter-login"
   },
   {
     "name": "google登录",

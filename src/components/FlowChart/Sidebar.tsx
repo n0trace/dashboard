@@ -3,16 +3,18 @@ import SidebarItem from "./SidebarItem";
 import defaultPods from "../../data/defaultPods.json";
 import _ from "lodash";
 import { IChart, ILink, INode } from "@mrblenny/react-flow-chart";
-import { Button, FormControl, Card } from "react-bootstrap";
+import { Button, FormControl, Card, Badge } from "react-bootstrap";
 
 interface Node extends INode {
   label?: string;
   description?: string;
+  template?: string;
 }
 
 type ParsedNode = {
   label: string;
   description: string;
+  template: string;
   id: string;
   properties: { [key: string]: string | number };
   newProperties: { [key: string]: string | number };
@@ -27,8 +29,9 @@ const parseNode = (node: Node): ParsedNode => {
   const newProperties = {};
   const label = node.label || "";
   const description = node.description || "";
+  const template = node.template || "";
 
-  return { label, description, id: node.id, properties, newProperties };
+  return { label, description, template, id: node.id, properties, newProperties };
 };
 
 function ReadOnly({ duplicateFlow }: { duplicateFlow: () => void }) {
@@ -115,6 +118,7 @@ function EditLink({ link, nodes, updateLink, deleteSelection }: EditLinkProps) {
 type PropertyItem = {
   name: string;
   type: string;
+  direction: string;
 };
 
 type EditNodeProps = {
@@ -122,6 +126,7 @@ type EditNodeProps = {
   availableProperties: PropertyItem[];
   updateLabel: (label: string) => void;
   updateDescription: (description: string) => void;
+  updateTemplate: (template: string) => void;
   updateNewValue: (key: string, value: string | number) => void;
   updateExistingValue: (key: string, value: string | number) => void;
   deleteSelection: () => void;
@@ -131,6 +136,7 @@ function EditNode({
   node,
   updateLabel,
   updateDescription,
+  updateTemplate,
   updateNewValue,
   updateExistingValue,
   deleteSelection,
@@ -159,6 +165,7 @@ function EditNode({
 
   let label = node.label || node.properties.name;
   let description = node.description || node.properties.description;
+  let template = node.template || node.properties.template;
 
   return (
     <div className="h-100 d-flex flex-column">
@@ -184,6 +191,18 @@ function EditNode({
           className="pod-description-input"
         />
       </div>
+      <div className="p-2 mb-1">
+        <p className="mb-1">
+          <b>Template</b>
+        </p>
+        <FormControl
+          spellCheck={false}
+          value={template}
+          readOnly={true}
+          onChange={(e) => updateTemplate(e.target.value)}
+          className="pod-description-input"
+        />
+      </div>
       <p className="mb-0 px-2">
         <b>Properties</b>
       </p>
@@ -197,16 +216,20 @@ function EditNode({
       </div>
       <div className="property-table flex-fill mx-2">
         {filteredProperties.map((property) => {
-          const { name, type } = property;
+          const { name, type, direction } = property;
           const value = node.properties[name];
 
           if (typeof value == "undefined")
             return (
               <div key={name} className="property-item mb-2">
-                <p className="property-label mb-1">{name}</p>
+                <p className="property-label mb-1">{name}
+                  <Badge variant="primary" className="ml-2 mt-1 py-1 px-2">
+                    {direction}
+                  </Badge></p>
                 <FormControl
                   spellCheck={false}
                   placeholder={type}
+                  readOnly={direction === 'output'}
                   type={type === "int" ? "number" : "text"}
                   value={node.newProperties[name] || ""}
                   onChange={(e) => updateNewValue(name, e.target.value)}
@@ -290,7 +313,7 @@ type FlowChartSidebarProps = {
     nodeFromId: string,
     nodeToId: string | undefined
   ) => void;
-  availableProperties: PropertyItem[];
+  availableProperties: any;
 };
 
 function FlowChartSidebar({
@@ -331,6 +354,14 @@ function FlowChartSidebar({
       description,
     });
   }
+
+  function updateTemplate(template: string) {
+    updateNode({
+      ...node,
+      template,
+    });
+  }
+
   function updateNewValue(key: string, value: any) {
     if (!node) return;
     let newNode = _.cloneDeep(node);
@@ -348,7 +379,6 @@ function FlowChartSidebar({
       ...newNode,
     });
   }
-
   return (
     <Card className="flowchart-sidebar mb-4">
       {selectedId ? (
@@ -362,10 +392,14 @@ function FlowChartSidebar({
         ) : (
             node && (
               <EditNode
-                availableProperties={availableProperties}
+                availableProperties={function () {
+                  let template = node.template || node.properties.template;
+                  return availableProperties[template];
+                }()}
                 node={node}
                 updateLabel={updateLabel}
                 updateDescription={updateDescription}
+                updateTemplate={updateTemplate}
                 updateNewValue={updateNewValue}
                 updateExistingValue={updateExistingValue}
                 deleteSelection={deleteSelection}
