@@ -1,7 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { Dispatcher, Constants, Store } from "../flux";
-import BuildHistory from "../components/Hub/BuildHistory";
 import { PageTitle } from "../components/Common/PageTitle";
 import Details from "../components/Hub/ImageDetails";
 import Readme from "../components/Hub/Readme";
@@ -25,7 +24,8 @@ class PackageView extends React.Component {
       loading: false,
       imageData: {
         reviews: [],
-        repoTags: [],
+        input_properties: [],
+        output_properties: [],
       },
     };
     Store.on("update-hub", this.getImageData);
@@ -75,14 +75,13 @@ class PackageView extends React.Component {
       name,
       readmeHTML,
       documentation,
-      totalStars,
-      totalRatings,
+      avg_stars,
       userRated,
       reviews,
     } = imageData;
     let rating;
-    if (totalStars && totalRatings) {
-      rating = totalStars / totalRatings;
+    if (avg_stars) {
+      rating = avg_stars;
     }
     return (
       <Container fluid className="main-content-container px-0">
@@ -91,37 +90,36 @@ class PackageView extends React.Component {
             <div className="loader" />
           </div>
         ) : (
-          <div className="px-4">
-            <Row noGutters className="page-header py-4">
-              <PageTitle
-                title={name}
-                subtitle="Image"
-                className="text-sm-left mb-3"
-              />
-              <Col md="6" />
-              <Col md="3" className="py-sm-2">
-                <h3>
-                  <StarRating
-                    rating={userRated || rating}
-                    rate={this.rate}
-                    userRated={userRated}
-                  />
-                </h3>
-              </Col>
-            </Row>
-            <Row>
-              <Col md="6">
-                <CopyCommand image={imageData} copyCode={this.copyCode} />
-                <Details image={imageData} />
-                <BuildHistory image={imageData} />
-              </Col>
-              <Col md="6">
-                <Readme readme={readmeHTML} documentation={documentation} />
-                <ImageReviews reviews={reviews} newReview={this.newReview} />
-              </Col>
-            </Row>
-          </div>
-        )}
+            <div className="px-4">
+              <Row noGutters className="page-header py-4">
+                <PageTitle
+                  title={name}
+                  subtitle="Image"
+                  className="text-sm-left mb-3"
+                />
+                <Col md="6" />
+                <Col md="3" className="py-sm-2">
+                  <h3>
+                    <StarRating
+                      rating={userRated || rating}
+                      rate={this.rate}
+                      userRated={userRated}
+                    />
+                  </h3>
+                </Col>
+              </Row>
+              <Row>
+                <Col md="6">
+                  <CopyCommand image={imageData} copyCode={this.copyCode} />
+                  <Details image={imageData} />
+                </Col>
+                <Col md="6">
+                  <Readme readme={readmeHTML} documentation={documentation} />
+                  <ImageReviews reviews={reviews} newReview={this.newReview} />
+                </Col>
+              </Row>
+            </div>
+          )}
       </Container>
     );
   };

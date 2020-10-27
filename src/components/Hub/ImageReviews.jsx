@@ -16,8 +16,8 @@ export default function ImageReviews({ reviews, newReview }) {
       {reviews.length > 0 ? (
         reviews.map((review, idx) => <ReviewCard key={idx} review={review} />)
       ) : (
-        <h2 className="text-muted text-center py-4">No Reviews</h2>
-      )}
+          <h2 className="text-muted text-center py-4">No Reviews</h2>
+        )}
     </div>
   );
 }

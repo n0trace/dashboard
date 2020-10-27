@@ -10,20 +10,19 @@ export default function ImageCard({ image }) {
     official,
     author,
     description,
-    totalStars,
-    totalRatings,
-    numReviews,
+    avg_stars,
+    num_reviews,
   } = image;
 
   let rating;
-  if (image.totalStars && image.totalRatings) {
-    rating = totalStars / totalRatings;
+  if (image.avg_stars) {
+    rating = avg_stars;
   }
 
   let reviews;
-  if (!numReviews) reviews = <span className="text-muted">no reviews</span>;
-  else if (numReviews > 1) reviews = <span>{numReviews} reviews</span>;
-  else reviews = <span>{numReviews} review</span>;
+  if (!num_reviews) reviews = <span className="text-muted">no reviews</span>;
+  else if (num_reviews > 1) reviews = <span>{num_reviews} reviews</span>;
+  else reviews = <span>{num_reviews} review</span>;
 
   return (
     <Link className="unstyled-link" to={`/package?id=${id}`}>

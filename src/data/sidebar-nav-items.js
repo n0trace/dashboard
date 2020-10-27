@@ -25,18 +25,18 @@ export default function () {
           matches: ["task"],
         },
         {
+          title: "Runner Hub",
+          to: "/hub",
+          htmlBefore: '<i class="material-icons">store</i>',
+          htmlAfter: "",
+          matches: ["hub", "package"],
+        },
+        {
           title: "Flow Design",
           to: "/flow",
           htmlBefore: '<i class="material-icons">device_hub</i>',
           htmlAfter: "",
           matches: ["flow"],
-        },
-        {
-          title: "Hub",
-          to: "/hub",
-          htmlBefore: '<i class="material-icons">store</i>',
-          htmlAfter: "",
-          matches: ["hub", "package"],
         },
         {
           title: "Settings",
