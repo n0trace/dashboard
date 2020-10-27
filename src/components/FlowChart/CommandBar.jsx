@@ -1,23 +1,23 @@
 import React from "react";
 import { ButtonGroup, Button } from "react-bootstrap";
 
-export default function ChartNode(props) {
+export default function CommandBar(props) {
   return (
     <div className="command-bar-container">
       <div className="command-bar">
         <ButtonGroup>
-          <Button variant="secondary" disabled>
+          <Button variant="secondary" >
             <i className="material-icons">play_arrow</i>
           </Button>
-          <Button variant="secondary" disabled>
+          {/* <Button variant="secondary" disabled>
             <i className="material-icons">stop</i>
           </Button>
           <Button variant="secondary" disabled>
             <i className="material-icons">schedule</i>
-          </Button>
-          <Button variant="secondary" onClick={props.importChart}>
+          </Button> */}
+          {/* <Button variant="secondary" onClick={props.importChart}>
             <i className="material-icons">save_alt</i>
-          </Button>
+          </Button> */}
           <Button variant="secondary" onClick={props.copyChart}>
             <i className="material-icons">assignment</i>
           </Button>
