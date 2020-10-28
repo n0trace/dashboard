@@ -119,6 +119,9 @@ type PropertyItem = {
   name: string;
   type: string;
   direction: string;
+  required: boolean;
+  refer: boolean;
+  referFrom: string;
 };
 
 type EditNodeProps = {
@@ -187,6 +190,7 @@ function EditNode({
         <FormControl
           spellCheck={false}
           value={description}
+          as={"textarea"}
           onChange={(e) => updateDescription(e.target.value)}
           className="pod-description-input"
         />
@@ -265,22 +269,9 @@ function PodMenu() {
   return (
     <div className="d-flex flex-column h-100">
       <h5 className="px-3 py-2 mb-0 border-bottom">
-        <b>Add Pods</b>
+        <b>Add Runners</b>
       </h5>
       <div className="p-3 scrollable flex-fill">
-        <SidebarItem
-          ports={{
-            inPort: {
-              id: "inPort",
-              type: "input",
-            },
-            outPort: {
-              id: "outPort",
-              type: "output",
-            },
-          }}
-          properties={{}}
-        />
         {defaultPods.map((pod, idx) => (
           <SidebarItem
             key={idx}
@@ -313,7 +304,7 @@ type FlowChartSidebarProps = {
     nodeFromId: string,
     nodeToId: string | undefined
   ) => void;
-  availableProperties: any;
+  availableProperties: { [key: string]: PropertyItem[] };
 };
 
 function FlowChartSidebar({

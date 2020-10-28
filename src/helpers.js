@@ -78,7 +78,6 @@ export function formatForFlowchart(pods, canvas) {
   let links = {};
 
   let prevNode = false;
-
   if (!pods.gateway) {
     let newPods = {};
     newPods = {
@@ -87,14 +86,13 @@ export function formatForFlowchart(pods, canvas) {
     };
     pods = newPods;
   }
-
   Object.keys(pods).forEach((id) => {
     const pod = pods[id] || {};
     let node = {
       id,
       label: id,
       ports: {},
-      needs: {},
+      needs: [],
       send_to: {},
       position: {},
       properties: { ...pod },
