@@ -8,13 +8,13 @@ import { Button, FormControl, Card, Badge } from "react-bootstrap";
 interface Node extends INode {
   label?: string;
   description?: string;
-  template?: string;
+  runner?: string;
 }
 
 type ParsedNode = {
   label: string;
   description: string;
-  template: string;
+  runner: string;
   id: string;
   properties: { [key: string]: string | number };
   newProperties: { [key: string]: string | number };
@@ -29,9 +29,9 @@ const parseNode = (node: Node): ParsedNode => {
   const newProperties = {};
   const label = node.label || "";
   const description = node.description || "";
-  const template = node.template || "";
+  const runner = node.runner || "";
 
-  return { label, description, template, id: node.id, properties, newProperties };
+  return { label, description, runner, id: node.id, properties, newProperties };
 };
 
 function ReadOnly({ duplicateFlow }: { duplicateFlow: () => void }) {
@@ -126,7 +126,7 @@ type EditNodeProps = {
   availableProperties: PropertyItem[];
   updateLabel: (label: string) => void;
   updateDescription: (description: string) => void;
-  updateTemplate: (template: string) => void;
+  updateRunner: (runner: string) => void;
   updateNewValue: (key: string, value: string | number) => void;
   updateExistingValue: (key: string, value: string | number) => void;
   deleteSelection: () => void;
@@ -136,7 +136,7 @@ function EditNode({
   node,
   updateLabel,
   updateDescription,
-  updateTemplate,
+  updateRunner,
   updateNewValue,
   updateExistingValue,
   deleteSelection,
@@ -165,7 +165,7 @@ function EditNode({
 
   let label = node.label || node.properties.name;
   let description = node.description || node.properties.description;
-  let template = node.template || node.properties.template;
+  let runner = node.runner || node.properties.runner;
 
   return (
     <div className="h-100 d-flex flex-column">
@@ -193,13 +193,13 @@ function EditNode({
       </div>
       <div className="p-2 mb-1">
         <p className="mb-1">
-          <b>Template</b>
+          <b>Runner</b>
         </p>
         <FormControl
           spellCheck={false}
-          value={template}
+          value={runner}
           readOnly={true}
-          onChange={(e) => updateTemplate(e.target.value)}
+          onChange={(e) => updateRunner(e.target.value)}
           className="pod-description-input"
         />
       </div>
@@ -355,10 +355,10 @@ function FlowChartSidebar({
     });
   }
 
-  function updateTemplate(template: string) {
+  function updateRunner(runner: string) {
     updateNode({
       ...node,
-      template,
+      runner,
     });
   }
 
@@ -393,13 +393,13 @@ function FlowChartSidebar({
             node && (
               <EditNode
                 availableProperties={function () {
-                  let template = node.template || node.properties.template;
-                  return availableProperties[template];
+                  let runner = node.runner || node.properties.runner;
+                  return availableProperties[runner];
                 }()}
                 node={node}
                 updateLabel={updateLabel}
                 updateDescription={updateDescription}
-                updateTemplate={updateTemplate}
+                updateRunner={updateRunner}
                 updateNewValue={updateNewValue}
                 updateExistingValue={updateExistingValue}
                 deleteSelection={deleteSelection}

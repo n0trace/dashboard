@@ -1,6 +1,6 @@
 module.exports = {
   pokedex: {
-    name: 'All Templates',
+    name: 'All runners',
     type: 'example',
     yaml: `!Flow
     with:
@@ -9,19 +9,23 @@ module.exports = {
     pods:
       gateway: {}
       twitter登录:
-        template: twitter-login
-        needs: gateway
+        runner: twitter-login
+        needs: 
+          - gateway
       google登录:
-        template: google-login
-        needs: gateway
+        runner: google-login
+        needs: 
+          - gateway
       twitter点赞:
-        template: twitter-praise
-        needs: twitter登录
+        runner: twitter-praise
+        needs: 
+         - twitter登录
       google表单:
-        template: google-form
-        needs: google登录
+        runner: google-form
+        needs: 
+         - google登录
       telegram机器人:
-        template: telegram-robot
+        runner: telegram-robot
         needs:
           - google表单
           - twitter点赞

@@ -28,7 +28,7 @@ export default function ChartNode(props) {
               {labelText || <span className="text-warning">Empty Pod</span>}
             </span>
             <Badge variant="primary" className="ml-2 mt-1 py-1 px-2">
-              {properties.template}
+              {properties.runner}
             </Badge>
           </p>
         </div>
