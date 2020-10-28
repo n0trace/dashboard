@@ -24,8 +24,8 @@ class PackageView extends React.Component {
       loading: false,
       imageData: {
         reviews: [],
-        input_properties: [],
-        output_properties: [],
+        params: [],
+        response: [],
       },
     };
     Store.on("update-hub", this.getImageData);

@@ -2,47 +2,47 @@
   "twitter-login": [
     {
       "name": "username/email",
-      "type": "str",
+      "type": "string",
       "direction": "input"
     },
     {
       "name": "password",
-      "type": "str",
+      "type": "string",
       "direction": "input"
     },
     {
       "name": "phone",
-      "type": "str",
+      "type": "string",
       "direction": "input"
     },
     {
       "name": "cookies",
-      "type": "str",
+      "type": "string",
       "direction": "output"
     }
   ],
   "twitter-praise": [
     {
       "name": "link",
-      "type": "str"
+      "type": "string"
     },
     {
       "name": "session",
-      "type": "str"
+      "type": "string"
     }
   ],
   "google-login": [
     {
       "name": "username/email",
-      "type": "str"
+      "type": "string"
     },
     {
       "name": "passport",
-      "type": "str"
+      "type": "string"
     },
     {
       "name": "phone",
-      "type": "str"
+      "type": "string"
     }
   ],
   "google-form": [
