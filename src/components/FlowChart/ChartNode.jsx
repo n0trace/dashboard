@@ -14,11 +14,10 @@ export default function ChartNode(props) {
       );
   });
   const isSpecial = Object.keys(properties).length > 0;
-  const isGateway = label === "gateway";
   let labelText = typeof label === "undefined" ? properties.name : label || "";
   return (
     <div
-      className={`chart-node ${isGateway ? "gateway" : ""}`}
+      className={`chart-node`}
       id={`chart-node-${label}`}
     >
       <div className="node-header">

@@ -23,8 +23,8 @@ export default function ReadMe({ readme, documentation }) {
             dangerouslySetInnerHTML={{ __html: readme }}
           />
         ) : (
-          <h2 className="text-muted text-center py-4">No Readme Found</h2>
-        )}
+            <h2 className="text-muted text-center py-4">No Readme Found</h2>
+          )}
       </CardBody>
     </Card>
   );

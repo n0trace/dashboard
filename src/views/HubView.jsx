@@ -15,21 +15,21 @@ class HubView extends React.Component {
   constructor() {
     super();
     this.state = {
-      images: Store.getHubImages(),
+      images: Store.getHubRunners(),
       sortType: "suggested",
       category: "all",
       searchQuery: "",
     };
 
-    Store.on("update-hub", this.getHubImages);
+    Store.on("update-hub", this.getHubRunners);
   }
 
   componentWillUnmount = () => {
-    Store.removeListener("update-hub", this.getHubImages);
+    Store.removeListener("update-hub", this.getHubRunners);
   };
 
-  getHubImages = () => {
-    const images = Store.getHubImages();
+  getHubRunners = () => {
+    const images = Store.getHubRunners();
     this.setState({ images });
   };
 

@@ -169,6 +169,14 @@ class FlowView extends React.Component {
     });
   };
 
+  saveChart = () => {
+
+  };
+
+  deleteChart = () => {
+
+  };
+
   copyChartAsYAML = () => {
     copyToClipboard(formatAsYAML(this.state.chart));
     alert("Chart copied to clipboard as YAML");
@@ -252,6 +260,8 @@ class FlowView extends React.Component {
                 deleteFlow={this.deleteFlow}
               />
               <CommandBar
+                saveChart={this.saveChart}
+                deleteChart={this.deleteChart}
                 copyChart={this.copyChartAsYAML}
                 importChart={this.showImportModal}
                 exportImage={this.exportImage}

@@ -6,7 +6,7 @@ const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
 const app = express();
 
-const { PORT, PRIVATE_MODE, PRIVATE_TOKEN, IMAGES_URL, MONGO_URL, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, DASHBOARD_URL,OAUTH_TOKEN } = require('./config');
+const { PORT, PRIVATE_MODE, PRIVATE_TOKEN, IMAGES_URL, MONGO_URL, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, DASHBOARD_URL, OAUTH_TOKEN } = require('./config');
 
 //Express/Passport middleware
 app.use(cors({ origin: DASHBOARD_URL, optionsSuccessStatus: 200, credentials: true }));
@@ -54,8 +54,8 @@ const githubRaw = axios.create({
 const githubAPI = axios.create({
 	baseURL: 'https://api.github.com/',
 	timeout: 30000, // 30 secs,
-	headers:{
-		'Authorization':`Bearer ${OAUTH_TOKEN}`
+	headers: {
+		'Authorization': `Bearer ${OAUTH_TOKEN}`
 	}
 });
 
@@ -102,7 +102,7 @@ app.get('/images', async function (req, res) {
 	if (sort === 'suggested') {
 		sort = false;
 	}
-	const images = await db.getImages(sort, category, q, after);
+	const images = await db.getRunners(sort, category, q, after);
 	console.log('found ', images.length, ' images');
 	res.send(images);
 });
@@ -110,7 +110,7 @@ app.get('/images', async function (req, res) {
 app.get('/images/:imageId', async function (req, res) {
 	const { imageId } = req.params;
 	console.log(`\nGET at /images/${imageId}`);
-	const image = await db.getImage(imageId);
+	const image = await db.getRunner(imageId);
 	image.reviews = await db.getReviews(imageId);
 	if (req.user) {
 
@@ -143,7 +143,7 @@ app.post('/images/:imageId/reviews', async function (req, res) {
 	if (!req.user)
 		return res.status(401).send({ error: 'unauthorized' });
 
-	const image = await db.getImage(imageId);
+	const image = await db.getRunner(imageId);
 	if (!image)
 		return res.status(404).send({ error: 'Image Does Not Exist' });
 
@@ -155,7 +155,7 @@ app.post('/images/:imageId/reviews', async function (req, res) {
 	if (result.ok == 1) {
 		console.log('value updated');
 		const rating = await db.getRating(imageId, userId)
-		const image = await db.getImage(imageId);
+		const image = await db.getRunner(imageId);
 		image.userRated = rating ? rating.stars : false;
 		image.userReviewed = content;
 		image.reviews = await db.getReviews(imageId);
@@ -180,7 +180,7 @@ app.post('/images/:imageId/ratings', async function (req, res) {
 	if (!req.user)
 		return res.status(401).send({ error: 'unauthorized' });
 
-	const image = await db.getImage(imageId);
+	const image = await db.getRunner(imageId);
 	if (!image)
 		return res.status(404).send({ error: 'Image Does Not Exist' });
 
@@ -190,7 +190,7 @@ app.post('/images/:imageId/ratings', async function (req, res) {
 
 	if (result.ok == 1) {
 		console.log('value updated');
-		const image = await db.getImage(imageId);
+		const image = await db.getRunner(imageId);
 		image.reviews = await db.getReviews(imageId);
 		image.userRated = stars;
 		res.json({ data: image });
@@ -229,7 +229,7 @@ async function loadHubImages() {
 	for (let i = 0; i < ids.length; ++i) {
 		let id = ids[i];
 		let image = images[id][images[id].length - 1]; //most recent image;
-		let imageDetails = await getImageDetails(image, id);
+		let imageDetails = await getRunnerDetails(image, id);
 		let imageData = {
 			id,
 			...imageDetails,
@@ -254,7 +254,7 @@ async function loadHubImages() {
 	return;
 }
 
-async function getImageDetails(image, id) {
+async function getRunnerDetails(image, id) {
 	let { Labels } = image.Inspect.Config;
 	let repoTags = image.Inspect.RepoTags;
 	let repoDigests = image.Inspect.RepoDigests;
@@ -303,20 +303,20 @@ async function getImageDetails(image, id) {
 		readmeRendered = _markdownHTML;
 	}
 	else {
-		try{
+		try {
 			let readmeResult = await githubRaw.get(readmeURL);
 			console.log('GET readme status:', readmeResult.status);
 			readmeRaw = readmeResult.data;
-	
+
 			let markdownResult = await githubAPI.post('markdown', { text: readmeRaw });
 			console.log('POST readme status:', markdownResult.status);
 			readmeRendered = markdownResult.data;
 		}
-		catch(e){
+		catch (e) {
 			console.log('could not get readme');
 			readmeRendered = false
 		}
-		
+
 	}
 
 	imageData.readmeHTML = readmeRendered;

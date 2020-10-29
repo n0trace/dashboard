@@ -48,11 +48,11 @@
   "google-form": [
     {
       "name": "socket_in",
-      "type": "SocketType"
+      "type": "map"
     },
     {
       "name": "socket_out",
-      "type": "SocketType"
+      "type": "string"
     }
   ],
   "telegram-robot": [],

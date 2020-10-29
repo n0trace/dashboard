@@ -87,13 +87,29 @@ export default {
     const result = await axios.get(connectionString, { timeout });
     return result.data;
   },
-  getImages: async () => {
+  getRunners: async () => {
     const result = await hub.post("tasks.Tasks/QueryAllRunners");
     return result.data['runners'];
   },
-  getImage: async (id) => {
+  getRunner: async (id) => {
     const result = await hub.post("tasks.Tasks/QueryRunner", { 'id': id });
     return result.data['runner'];
+  },
+  getAllQFlows: async () => {
+    const result = await hub.post("tasks.Tasks/QueryAllFlows");
+    return result.data['flows'];
+  },
+  getFlow: async (id) => {
+    const result = await hub.post("tasks.Tasks/QueryFlow", { 'id': id });
+    return result.data['flow'];
+  },
+  updateFlow: async (flow) => {
+    const result = await hub.post("tasks.Tasks/UpdateFlow", { flow });
+    return result.data['flow'];
+  },
+  addFlow: async (flow) => {
+    const result = await hub.post("tasks.Tasks/AddFlow", { flow });
+    return result.data['flow'];
   },
   postRating: async (imageId, stars) => {
     const result = await hub.post(`/images/${imageId}/ratings`, { stars });
@@ -113,4 +129,5 @@ export default {
     const result = await hub.post("/auth/logout");
     return result.data;
   },
+
 };

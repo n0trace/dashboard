@@ -83,10 +83,10 @@ module.exports = {
   getUser(id) {
     return getOne('users', { id })
   },
-  getImage(id) {
+  getRunner(id) {
     return getOne('images', { id });
   },
-  getImages(sortParam, categoryParam, q, after) {
+  getRunners(sortParam, categoryParam, q, after) {
     let options;
     let sort;
     switch (sortParam) {

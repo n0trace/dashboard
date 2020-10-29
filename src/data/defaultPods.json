@@ -1,22 +1,17 @@
 [
   {
-    "name": "twitter登录",
     "runner": "twitter-login"
   },
   {
-    "name": "google登录",
     "runner": "google-login"
   },
   {
-    "name": "twitter点赞",
     "runner": "twitter-praise"
   },
   {
-    "name": "google表单",
     "runner": "google-form"
   },
   {
-    "name": "电报机器人",
     "runner": "telegram-robot"
   }
 ]

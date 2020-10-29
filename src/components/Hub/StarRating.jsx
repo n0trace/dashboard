@@ -5,9 +5,8 @@ export default function StarRating({ rating, userRated, rate }) {
   const stars = getStars(formatted, rate);
   return (
     <span
-      className={`app-rating ${rating ? "existing" : ""} ${
-        userRated ? "userRated" : ""
-      } text-muted`}
+      className={`app-rating ${rating ? "existing" : ""} ${userRated ? "userRated" : ""
+        } text-muted`}
     >
       <span className="text-faded">{userRated ? "You Rated: " : ""}</span>
       <span className="rating-num">{rating ? formatted : ""}</span>
@@ -15,6 +14,7 @@ export default function StarRating({ rating, userRated, rate }) {
     </span>
   );
 }
+
 
 const getStars = (amount, rate) => {
   let stars = [];

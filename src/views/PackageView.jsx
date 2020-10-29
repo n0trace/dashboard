@@ -28,19 +28,19 @@ class PackageView extends React.Component {
         response: [],
       },
     };
-    Store.on("update-hub", this.getImageData);
+    Store.on("update-hub", this.getRunnerData);
   }
 
   componentDidMount = () => {
-    this.getImageData();
+    this.getRunnerData();
   };
 
   componentWillUnmount = () => {
-    Store.removeListener("update-hub", this.getImageData);
+    Store.removeListener("update-hub", this.getRunnerData);
   };
 
-  getImageData = async () => {
-    const imageData = (await Store.getHubImage(this.state.imageId)) || {};
+  getRunnerData = async () => {
+    const imageData = (await Store.getHubRunner(this.state.imageId)) || {};
     this.setState({ imageData, loading: false });
   };
 

@@ -411,7 +411,7 @@ class Store extends EventEmitter {
 
   initHub = async () => {
     try {
-      const images = await api.getImages();
+      const images = await api.getRunners();
       _store.hub = images;
     } catch (e) {
       _store.hub = false;
@@ -475,6 +475,7 @@ class Store extends EventEmitter {
   };
 
   updateFlow = (newFlow) => {
+    console.log("updateFlow", newFlow)
     _store.flows[_store.selectedFlow].flow = newFlow;
     this.saveFlowsToStorage();
     this.emit("update-flowchart");
@@ -657,13 +658,13 @@ class Store extends EventEmitter {
     return _store.user;
   };
 
-  getHubImages = () => {
+  getHubRunners = () => {
     return _store.hub;
   };
 
-  getHubImage = async (imageId) => {
+  getHubRunner = async (imageId) => {
     if (!_store.images[imageId]) {
-      _store.images[imageId] = await api.getImage(imageId);
+      _store.images[imageId] = await api.getRunner(imageId);
     }
     return _store.images[imageId];
   };

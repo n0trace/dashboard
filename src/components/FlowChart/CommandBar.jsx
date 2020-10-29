@@ -6,18 +6,25 @@ export default function CommandBar(props) {
     <div className="command-bar-container">
       <div className="command-bar">
         <ButtonGroup>
-          <Button variant="secondary" >
+          {/* <Button variant="secondary" >
             <i className="material-icons">play_arrow</i>
-          </Button>
+          </Button> */}
+
           {/* <Button variant="secondary" disabled>
             <i className="material-icons">stop</i>
           </Button>
           <Button variant="secondary" disabled>
             <i className="material-icons">schedule</i>
           </Button> */}
-          {/* <Button variant="secondary" onClick={props.importChart}>
-            <i className="material-icons">save_alt</i>
-          </Button> */}
+          <Button variant="secondary" onClick={props.saveChart}>
+            <i className="material-icons">save</i>
+          </Button>
+          <Button variant="secondary" onClick={props.deleteChart} >
+            <i className="material-icons">delete</i>
+          </Button>
+          <Button variant="secondary" onClick={props.importChart}>
+            <i className="material-icons">publish</i>
+          </Button>
           <Button variant="secondary" onClick={props.copyChart}>
             <i className="material-icons">assignment</i>
           </Button>

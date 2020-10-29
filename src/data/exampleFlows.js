@@ -7,15 +7,10 @@ module.exports = {
       read_only: true
       rest_api: true
     pods:
-      gateway: {}
       twitter登录:
         runner: twitter-login
-        needs: 
-          - gateway
       google登录:
         runner: google-login
-        needs: 
-          - gateway
       twitter点赞:
         runner: twitter-praise
         needs: 

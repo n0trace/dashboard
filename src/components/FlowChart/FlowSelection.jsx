@@ -5,8 +5,8 @@ function SelectionIndicator({ selected }) {
   return selected ? (
     <i className="material-icons text-primary">radio_button_checked</i>
   ) : (
-    <i className="material-icons">radio_button_unchecked</i>
-  );
+      <i className="material-icons">radio_button_unchecked</i>
+    );
 }
 
 function ConnectionIndicator({ connected, show }) {
@@ -14,8 +14,8 @@ function ConnectionIndicator({ connected, show }) {
   return connected ? (
     <i className="material-icons ml-2 text-success">wifi</i>
   ) : (
-    <i className="material-icons ml-2 text-warning">wifi_off</i>
-  );
+      <i className="material-icons ml-2 text-warning">wifi_off</i>
+    );
 }
 
 function TitleConnectionIndicator({ connected, show }) {
@@ -23,8 +23,8 @@ function TitleConnectionIndicator({ connected, show }) {
   return connected ? (
     <i className="material-icons text-white ml-1 mr-2">wifi</i>
   ) : (
-    <i className="material-icons text-warning ml-1 mr-2">wifi_off</i>
-  );
+      <i className="material-icons text-warning ml-1 mr-2">wifi_off</i>
+    );
 }
 
 function DeleteFlowButton({ show, deleteFlow }) {
@@ -45,10 +45,10 @@ function EditFlowsButton({ isEditing, onClick }) {
       done
     </i>
   ) : (
-    <i onClick={onClick} className="material-icons float-right cursor-pointer">
-      edit
-    </i>
-  );
+      <i onClick={onClick} className="material-icons float-right cursor-pointer">
+        edit
+      </i>
+    );
 }
 
 export default function FlowSelection({

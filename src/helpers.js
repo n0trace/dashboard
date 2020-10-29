@@ -77,15 +77,6 @@ export function formatForFlowchart(pods, canvas) {
   let nodes = {};
   let links = {};
 
-  let prevNode = false;
-  if (!pods.gateway) {
-    let newPods = {};
-    newPods = {
-      gateway: null,
-      ...pods,
-    };
-    pods = newPods;
-  }
   Object.keys(pods).forEach((id) => {
     const pod = pods[id] || {};
     let node = {
@@ -102,8 +93,6 @@ export function formatForFlowchart(pods, canvas) {
 
     node.ports["inPort"] = { id: "inPort", type: "input" };
     node.ports["outPort"] = { id: "outPort", type: "output" };
-
-    if (prevNode && !pod.needs && id !== "gateway") pod.needs = prevNode;
 
     if (pod.needs) {
       let parents = Array.isArray(pod.needs) ? pod.needs : [pod.needs];
@@ -129,7 +118,6 @@ export function formatForFlowchart(pods, canvas) {
     }
 
     nodes[id] = node;
-    prevNode = id;
   });
 
   const depthPopulation = {}; //how many nodes at each depth
@@ -162,8 +150,6 @@ const getNodeLabelsByPortId = ({ from, to }, nodes) => ({
 });
 const decodePropValue = (propName, propValue) =>
   propertyTypes[propName] === "bool" ? propValue === "true" : propValue;
-const unpackIfLengthOne = (arr) =>
-  Array.isArray(arr) && arr.length === 1 ? arr[0] : arr;
 
 export function formatAsYAML(chart) {
   console.log("formatAsYAML input: ", chart);
@@ -193,7 +179,7 @@ export function formatAsYAML(chart) {
       {}
     );
     if (needsByPodLabel[label]) {
-      podProperties.needs = unpackIfLengthOne(needsByPodLabel[label]);
+      podProperties.needs = needsByPodLabel[label];
     }
 
     acc[label] = { ...podProperties };

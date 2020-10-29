@@ -144,10 +144,6 @@ code {
   background-color: transparent !important;
 }
 
-.chart-node.gateway {
-  opacity: 0.5;
-}
-
 .chart-node.special {
   background: #32c8cd;
   color: white;
