@@ -95,7 +95,7 @@ export default {
     const result = await hub.post("tasks.Tasks/QueryRunner", { 'id': id });
     return result.data['runner'];
   },
-  getAllQFlows: async () => {
+  getFlows: async () => {
     const result = await hub.post("tasks.Tasks/QueryAllFlows");
     return result.data['flows'];
   },
@@ -129,5 +129,4 @@ export default {
     const result = await hub.post("/auth/logout");
     return result.data;
   },
-
 };

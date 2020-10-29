@@ -33,7 +33,7 @@ export default function () {
         },
         {
           title: "Flow Design",
-          to: "/flow",
+          to: "/flows",
           htmlBefore: '<i class="material-icons">device_hub</i>',
           htmlAfter: "",
           matches: ["flow"],

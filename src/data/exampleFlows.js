@@ -1,5 +1,5 @@
 module.exports = {
-  pokedex: {
+  all_runners: {
     name: 'All runners',
     type: 'example',
     yaml: `!Flow

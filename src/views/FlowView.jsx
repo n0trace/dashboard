@@ -13,7 +13,6 @@ import CustomNode from "../components/FlowChart/ChartNode";
 import CustomPort from "../components/FlowChart/NodePort";
 import FlowSelection from "../components/FlowChart/FlowSelection";
 import { formatAsYAML, copyToClipboard } from "../helpers";
-
 const syncEvents = [
   "onDragNodeStop",
   "onCanvasDrop",
@@ -27,7 +26,15 @@ const syncEvents = [
 class FlowView extends React.Component {
   constructor(props) {
     super(props);
-    const { flow: chart, type: flowType } = Store.getFlowchart();
+    let windowHash = window.location.hash;
+    const windowParams = windowHash.substring(
+      windowHash.indexOf("?"),
+      windowHash.length
+    );
+    const params = new URLSearchParams(windowParams);
+    const flowId = params.get("id");
+    Store.loadFlow(flowId)
+    const { flow: chart, type: flowType } = Store.getFlowChart();
     const selectedFlowId = Store.getSelectedFlowId();
     const flows = Store.getFlows();
     const connected = Store.getConnectionStatus();
@@ -98,7 +105,7 @@ class FlowView extends React.Component {
   };
 
   getData = () => {
-    const { flow: chart, type: flowType } = Store.getFlowchart();
+    const { flow: chart, type: flowType } = Store.getFlowChart();
     const selectedFlowId = Store.getSelectedFlowId();
     const flows = Store.getFlows();
     this.setState({ chart, flowType, selectedFlowId, flows });
@@ -261,7 +268,9 @@ class FlowView extends React.Component {
               />
               <CommandBar
                 saveChart={this.saveChart}
-                deleteChart={this.deleteChart}
+                deleteChart={(e) => {
+                  this.deleteFlow(e, selectedFlowId)
+                }}
                 copyChart={this.copyChartAsYAML}
                 importChart={this.showImportModal}
                 exportImage={this.exportImage}

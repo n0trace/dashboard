@@ -19,9 +19,13 @@ export default function CommandBar(props) {
           <Button variant="secondary" onClick={props.saveChart}>
             <i className="material-icons">save</i>
           </Button>
-          <Button variant="secondary" onClick={props.deleteChart} >
+
+          <Button variant="secondary" onClick={(e) => {
+            props.deleteChart(e);
+          }} >
             <i className="material-icons">delete</i>
           </Button>
+
           <Button variant="secondary" onClick={props.importChart}>
             <i className="material-icons">publish</i>
           </Button>

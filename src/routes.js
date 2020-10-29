@@ -10,6 +10,7 @@ import { LogsView } from "./views/LogsView";
 import TaskView from "./views/TaskView";
 import Settings from "./views/Settings";
 import HubView from "./views/HubView";
+import FlowChartsView from "./views/FlowChartsView";
 import PackageView from "./views/PackageView";
 import LogIn from "./views/LogIn";
 
@@ -26,6 +27,15 @@ export default [
     path: "/logs",
     layout: IconSidebar,
     component: LogsView,
+    props: {
+      usesConnection: true,
+      usesAuth: false,
+    },
+  },
+  {
+    path: "/flows",
+    layout: IconSidebar,
+    component: FlowChartsView,
     props: {
       usesConnection: true,
       usesAuth: false,

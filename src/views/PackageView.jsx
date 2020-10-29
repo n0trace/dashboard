@@ -75,13 +75,13 @@ class PackageView extends React.Component {
       name,
       readmeHTML,
       documentation,
-      avg_stars,
+      avgStars,
       userRated,
       reviews,
     } = imageData;
     let rating;
-    if (avg_stars) {
-      rating = avg_stars;
+    if (avgStars) {
+      rating = avgStars;
     }
     return (
       <Container fluid className="main-content-container px-0">

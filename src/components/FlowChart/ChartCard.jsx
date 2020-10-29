@@ -1,31 +1,18 @@
 import React from "react";
 import { Row, Col, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import StarRating from "./StarRating";
 
-export default function ImageCard({ image }) {
+export default function ChartCard({ flow, flowId }) {
   let {
     name,
     id,
     official,
     author,
-    description,
-    avgStars,
-    numReviews,
-  } = image;
-
-  let rating;
-  if (image.avgStars) {
-    rating = avgStars;
-  }
-
-  let reviews;
-  if (!numReviews) reviews = <span className="text-muted">no reviews</span>;
-  else if (numReviews > 1) reviews = <span>{numReviews} reviews</span>;
-  else reviews = <span>{numReviews} review</span>;
+    description
+  } = flow;
 
   return (
-    <Link className="unstyled-link" to={`/package?id=${id}`} >
+    <Link className="unstyled-link" to={`/flow?id=${flowId}`} >
       <Card className="clickable mb-4 h-100">
         <Card.Body className="pb-0 mb-0 pt-3">
           <Row>
@@ -50,10 +37,6 @@ export default function ImageCard({ image }) {
             </Col>
           </Row>
         </Card.Body>
-        <Card.Footer className="pt-0 px-3 pb-3">
-          {reviews}
-          {rating && <StarRating rating={rating} />}
-        </Card.Footer>
       </Card>
     </Link>
   );
