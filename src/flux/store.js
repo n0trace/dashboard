@@ -24,7 +24,6 @@ const CHART_LEVELS = [
   "CRITICAL",
   "DEBUG",
 ];
-
 function getInitialFlow() {
   return {
     selected: {},
@@ -70,7 +69,6 @@ function getInitialStore() {
     navItems: getSidebarNavItems(),
     flows: {
     },
-    selectedFlow: "_userFlow",
     logs: [],
     logSources: {},
     logLevels: {},
@@ -181,12 +179,11 @@ class Store extends EventEmitter {
   init = async () => {
     this.clearIntervals();
     _store = getInitialStore();
-    await this.initFlowChart();
     this.initLogStream();
     this.initCharts();
-    this.initHub();
+    this.initRunnersHub();
+    this.initFlowCharts();
     this.initUser();
-    this.initFlows();
     this.emit("update-ui");
     this.emit("update-settings");
   };
@@ -229,7 +226,6 @@ class Store extends EventEmitter {
       type: "remote",
     };
     _store.flows = { ...flows, ..._store.flows };
-    _store.selectedFlow = "connectedFlow";
 
     this.emit("update-ui");
     this.emit("update-flowchart");
@@ -371,7 +367,7 @@ class Store extends EventEmitter {
     this.updateChartInterval = setInterval(this.updateSummaryCharts, 1000);
   };
 
-  initHub = async () => {
+  initRunnersHub = async () => {
     try {
       const images = await api.getRunners();
       _store.hub = images;
@@ -381,37 +377,39 @@ class Store extends EventEmitter {
     this.emit("update-hub");
   };
 
+  buildFlowChart = (flow) => {
+    const parsed = parseYAML(flow.flowChart);
+    const id = flow.id;
+    let canvas;
+    try {
+      canvas = parsed.data.with.board.canvas;
+      console.log(canvas)
+      canvas = {};
+    } catch (e) {
+      canvas = {};
+    }
+    const formatted = formatForFlowchart(parsed.data.pods, canvas);
+    return {
+      ...flow,
+      flow: formatted,
+    }
+  };
   buildFlows = (flows) => {
     let mapping = {};
     flows.forEach(flow => {
-      const parsed = parseYAML(flow.flowChart);
-      const id = flow.id;
-      let canvas;
-      try {
-        canvas = parsed.data.with.board.canvas;
-        console.log(canvas)
-        canvas = {};
-      } catch (e) {
-        canvas = {};
-      }
-      const formatted = formatForFlowchart(parsed.data.pods, canvas);
-      console.log('####', formatted)
-      mapping[id] = {
-        ...flow,
-        flow: formatted,
-      };
+      mapping[flow.id] = this.buildFlowChart(flow);
     });
     return mapping;
   };
 
-  initFlows = async () => {
+  initFlowCharts = async () => {
     try {
       const flows = await api.getFlows();
       _store.flows = this.buildFlows(flows);
     } catch (e) {
       _store.flows = {};
     }
-    this.emit("update-flows");
+    this.emit("update-flowchart");
   };
 
   initUser = async () => {
@@ -464,13 +462,8 @@ class Store extends EventEmitter {
     this.emit("update-flowchart");
   };
 
-  loadFlow = (flowId) => {
-    _store.selectedFlow = flowId;
-    this.emit("update-flowchart");
-  };
-
   updateFlow = (newFlow) => {
-    _store.flows[_store.selectedFlow].flow = newFlow;
+    _store.flows[newFlow.id].flow = newFlow;
     this.saveFlowsToStorage();
     this.emit("update-flowchart");
   };
@@ -509,7 +502,6 @@ class Store extends EventEmitter {
       flow,
     };
 
-    _store.selectedFlow = id;
     this.saveFlowsToStorage();
     this.emit("update-flowchart");
   };
@@ -521,20 +513,19 @@ class Store extends EventEmitter {
       ([id, flow]) => flow.type !== "example"
     );
 
-    if (_store.selectedFlow === flowId && nonExampleFlows.length) {
-      _store.selectedFlow = nonExampleFlows[0][0];
-    }
-    else if (!nonExampleFlows.length) {
-      _store.flows = {
-        _userFlow: {
-          name: "Custom Flow 1",
-          type: "user-generated",
-          flow: getInitialFlow(),
-        },
-        ..._store.flows,
-      };
-      _store.selectedFlow = "_userFlow";
-    }
+    // if (_store.selectedFlow === flowId && nonExampleFlows.length) {
+    //   _store.selectedFlow = nonExampleFlows[0][0];
+    // }
+    // else if (!nonExampleFlows.length) {
+    //   _store.flows = {
+    //     _userFlow: {
+    //       name: "Custom Flow 1",
+    //       type: "user-generated",
+    //       flow: getInitialFlow(),
+    //     },
+    //     ..._store.flows,
+    //   };
+    // }
 
     this.saveFlowsToStorage();
     this.emit("update-flowchart");
@@ -733,17 +724,24 @@ class Store extends EventEmitter {
     return _store.loading;
   };
 
-  getFlowChart = () => {
-    return _store.flows[_store.selectedFlow];
+  getFlowChart = (flowId) => {
+    if (_store.flows[flowId] !== undefined) {
+      return _store.flows[flowId];
+    }
+    try {
+      const flow = api.getFlow(flowId);
+      _store.flows[flowId] = this.buildFlowChart(flow);
+      return _store.flows[flowId];
+    } catch (e) {
+      logger.log("initFlowChart - getFlowChartERROR", e);
+      return;
+    }
   };
 
   getFlows = () => {
     return _store.flows;
   };
 
-  getSelectedFlowId = () => {
-    return _store.selectedFlow;
-  };
 
   getAvailableProperties = () => {
     return propertyList;

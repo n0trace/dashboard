@@ -21,11 +21,11 @@ class FlowChartsView extends React.Component {
       searchQuery: "",
     };
 
-    Store.on("update-flows", this.getFlows);
+    Store.on("update-flowchart", this.getFlows);
   }
 
   componentWillUnmount = () => {
-    Store.removeListener("update-flows", this.getFlows);
+    Store.removeListener("update-flowchart", this.getFlows);
   };
 
   getFlows = () => {

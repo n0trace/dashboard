@@ -33,18 +33,18 @@ class FlowView extends React.Component {
     );
     const params = new URLSearchParams(windowParams);
     const flowId = params.get("id");
-    Store.loadFlow(flowId)
-    const { flow: chart, type: flowType } = Store.getFlowChart();
-    const selectedFlowId = Store.getSelectedFlowId();
+    console.log("#########", Store.getFlowChart(flowId));
+    const { flow: chart, type: flowType } = Store.getFlowChart(flowId);
     const flows = Store.getFlows();
     const connected = Store.getConnectionStatus();
     const availableProperties = Store.getAvailableProperties();
     this.state = {
+      loading: true,
+      id: flowId,
       availableProperties,
       flowType,
       connected,
       chart,
-      selectedFlowId,
       flows,
       showOverlay: false,
     };
@@ -65,10 +65,19 @@ class FlowView extends React.Component {
     Store.on("update-flowchart", this.getData);
   }
 
+  getData = () => {
+    console.log("#########", Store.getFlowChart(this.state.id));
+    const { flow: chart, type: flowType } = Store.getFlowChart(this.state.id);
+    const flows = Store.getFlows();
+    this.setState({ chart, flowType, flows });
+  };
+
+
   componentDidMount = () => {
     document
       .querySelector(".chart-container")
       .addEventListener("contextmenu", (e) => e.preventDefault());
+    this.getData();
   };
 
   componentWillUnmount = () => {
@@ -104,12 +113,6 @@ class FlowView extends React.Component {
     this.setState({ showOverlay });
   };
 
-  getData = () => {
-    const { flow: chart, type: flowType } = Store.getFlowChart();
-    const selectedFlowId = Store.getSelectedFlowId();
-    const flows = Store.getFlows();
-    this.setState({ chart, flowType, selectedFlowId, flows });
-  };
 
   getConnectionStatus = () => {
     const connected = Store.getConnectionStatus();
@@ -234,9 +237,9 @@ class FlowView extends React.Component {
 
   render = () => {
     const {
+      id,
       chart,
       flows,
-      selectedFlowId,
       showOverlay,
       connected,
       flowType,
@@ -258,18 +261,18 @@ class FlowView extends React.Component {
           </Row>
           <div className="flow-container d-flex flex-column flex-md-row">
             <Card className="chart-section-container p-1 mr-md-4 mb-4">
-              <FlowSelection
+              {/* <FlowSelection
                 connected={connected}
                 flows={flows}
                 selectedFlowId={selectedFlowId}
                 createNewFlow={this.createNewFlow}
                 loadFlow={this.loadFlow}
                 deleteFlow={this.deleteFlow}
-              />
+              /> */}
               <CommandBar
                 saveChart={this.saveChart}
                 deleteChart={(e) => {
-                  this.deleteFlow(e, selectedFlowId)
+                  this.deleteFlow(e, id)
                 }}
                 copyChart={this.copyChartAsYAML}
                 importChart={this.showImportModal}
